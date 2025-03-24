@@ -1,0 +1,16 @@
+
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Hide scrollbar in Webkit browsers */
+::-webkit-scrollbar {
+    display: none; /* Hides scrollbar */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: transparent; /* Optional: This also makes the thumb invisible */
+  }
+  
