@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (max-width: 399px) {
+  .register-btn {
+    display: none;
+  }
+}
 
 /* Hide scrollbar in Webkit browsers */
 ::-webkit-scrollbar {
