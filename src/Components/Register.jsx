@@ -43,17 +43,7 @@ const Register = () => {
                             required
                         />
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-white font-medium">Last Name</label>
-                        <input 
-                            type="text"
-                            className="w-full px-4 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none text-white placeholder-gray-200"
-                            placeholder="Enter your name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
+                    
 
 
                     <div className="mb-4">
