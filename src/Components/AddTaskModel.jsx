@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTask } from '../Features/Taskslice';
+import { addTask } from '../redux/taskSlice';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 const AddTaskModal = () => {
@@ -18,9 +18,9 @@ const AddTaskModal = () => {
 
   return (
     <>
-      <Button variant="contained" onClick={() => setOpen(true)}>
+      {/* <Button variant="contained" onClick={() => setOpen(true)}>
         Add Task
-      </Button>
+      </Button> */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add New Task</DialogTitle>
         <DialogContent>

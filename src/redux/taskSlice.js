@@ -54,13 +54,13 @@ const taskSlice = createSlice({
     addTask: (state, action) => {
       state.tasks.push(action.payload);
     },
-    moveTask: (state, action) => {
-      const { id, newStatus } = action.payload;
-      const task = state.tasks.find((task) => task.id === id);
-      if (task) {
-        task.status = newStatus;
-      }
-    },
+    // moveTask: (state, action) => {
+    //   const { id, newStatus } = action.payload;
+    //   const task = state.tasks.find((task) => task.id === id);
+    //   if (task) {
+    //     task.status = newStatus;
+    //   }
+    // },
     updateTask: (state, action) => {
       const updatedTask = action.payload;
       const index = state.tasks.findIndex((task) => task.id === updatedTask.id);
@@ -74,5 +74,5 @@ const taskSlice = createSlice({
   },
 });
 
-export const { addTask, moveTask, updateTask, deleteTask } = taskSlice.actions;
+export const { addTask,  updateTask, deleteTask } = taskSlice.actions;
 export default taskSlice.reducer;

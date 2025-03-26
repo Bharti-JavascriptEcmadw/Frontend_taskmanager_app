@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
 import { Button, TextField, MenuItem } from "@mui/material";
 
-const TaskColumn = ({ id, title, tasks, addTask, updateTask, deleteTask, provided }) => {
+const TaskColumn = ({ title, tasks, addTask, updateTask, deleteTask }) => {
   const [taskData, setTaskData] = useState({
     id: "",
     title: "",
@@ -45,36 +44,23 @@ const TaskColumn = ({ id, title, tasks, addTask, updateTask, deleteTask, provide
   };
 
   return (
-    <div
-      ref={provided.innerRef}
-      {...provided.droppableProps}
-      className="w-full max-w-md sm:max-w-lg lg:max-w-xl p-3 sm:p-4 bg-red-100 rounded-lg shadow-lg"
-    >
+    <div className="w-full max-w-md sm:max-w-lg lg:max-w-xl p-3 sm:p-4 bg-red-100 rounded-lg shadow-lg">
       <h3 className="text-base sm:text-lg md:text-xl font-semibold text-black mb-3 sm:mb-5">
         {title}
       </h3>
 
-      {tasks.map((task, index) => (
-        <Draggable key={task.id} draggableId={task.id} index={index}>
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              className="mb-3 sm:mb-4 p-3 bg-white rounded-lg shadow-md"
-            >
-              <TaskCard {...task} />
-              <div className="flex justify-between mt-2">
-                <Button variant="outlined" color="primary" size="small" onClick={() => handleOpenModal(task)}>
-                  Edit
-                </Button>
-                <Button variant="outlined" color="secondary" size="small" onClick={() => deleteTask(task.id)}>
-                  Delete
-                </Button>
-              </div>
-            </div>
-          )}
-        </Draggable>
+      {tasks.map((task) => (
+        <div key={task.id} className="mb-3 sm:mb-4 p-3 bg-white rounded-lg shadow-md">
+          <TaskCard {...task} />
+          <div className="flex justify-between mt-2">
+            <Button variant="outlined" color="primary" size="small" onClick={() => handleOpenModal(task)}>
+              Edit
+            </Button>
+            <Button variant="outlined" color="secondary" size="small" onClick={() => deleteTask(task.id)}>
+              Delete
+            </Button>
+          </div>
+        </div>
       ))}
 
       <Button
@@ -89,8 +75,6 @@ const TaskColumn = ({ id, title, tasks, addTask, updateTask, deleteTask, provide
       >
         Add Task
       </Button>
-
-      {provided.placeholder}
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-6">

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTask, moveTask, updateTask, deleteTask } from "../redux/taskSlice"; 
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { addTask, updateTask, deleteTask } from "../redux/taskSlice"; 
 import Header1 from "../Components/Header1";
 import TaskColumn from "../Components/TaskColumn";
 import Filter from "../Components/Filter";
@@ -13,8 +12,8 @@ const Dashboard = () => {
 
   const [filter, setFilter] = useState({
     priority: "",
-    category: "",
-    dueDate: "",
+    title: "",
+    
   });
 
   const handleAddTask = (task, column) => {
@@ -27,17 +26,6 @@ const Dashboard = () => {
 
   const handleDeleteTask = (taskId) => {
     dispatch(deleteTask(taskId));
-  };
-
-  const handleOnDragEnd = (result) => {
-    const { destination, source } = result;
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
-    const movedTask = tasks.find((task) => task.id === result.draggableId);
-    if (movedTask) {
-      dispatch(moveTask({ id: movedTask.id, newStatus: destination.droppableId }));
-    }
   };
 
   const handleFilterChange = (filters) => {
@@ -53,8 +41,7 @@ const Dashboard = () => {
     return columnTasks.filter((task) => {
       return (
         (filter.priority ? task.priority === filter.priority : true) &&
-        (filter.category ? task.category?.toLowerCase().includes(filter.category.toLowerCase()) : true) &&
-        (filter.dueDate ? task.dueDate === filter.dueDate : true)
+        (filter.title ? task.title?.toLowerCase().includes(filter.title.toLowerCase()) : true)
       );
     });
   };
@@ -77,60 +64,40 @@ const Dashboard = () => {
 
       {/* Task Board with Responsive Layout */}
       <div className="flex-1 p-4 bg-teal-200">
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* To Do Column */}
-            <Droppable droppableId="To Do">
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} className="w-full sm:w-1/3">
-                  <TaskColumn
-                    title="To Do"
-                    tasks={filterTasks(todoTasks)}
-                    addTask={(task) => handleAddTask(task, "To Do")}
-                    updateTask={handleUpdateTask}
-                    deleteTask={handleDeleteTask}
-                    provided={provided}
-                  />
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {/* In Progress Column */}
-            <Droppable droppableId="In Progress">
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} className="w-full sm:w-1/3">
-                  <TaskColumn
-                    title="In Progress"
-                    tasks={filterTasks(inProgressTasks)}
-                    addTask={(task) => handleAddTask(task, "In Progress")}
-                    updateTask={handleUpdateTask}
-                    deleteTask={handleDeleteTask}
-                    provided={provided}
-                  />
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {/* Done Column */}
-            <Droppable droppableId="Done">
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} className="w-full sm:w-1/3">
-                  <TaskColumn
-                    title="Done"
-                    tasks={filterTasks(doneTasks)}
-                    addTask={(task) => handleAddTask(task, "Done")}
-                    updateTask={handleUpdateTask}
-                    deleteTask={handleDeleteTask}
-                    provided={provided}
-                  />
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* To Do Column */}
+          <div className="w-full sm:w-1/3">
+            <TaskColumn
+              title="To Do"
+              tasks={filterTasks(todoTasks)}
+              addTask={(task) => handleAddTask(task, "To Do")}
+              updateTask={handleUpdateTask}
+              deleteTask={handleDeleteTask}
+            />
           </div>
-        </DragDropContext>
+
+          {/* In Progress Column */}
+          <div className="w-full sm:w-1/3">
+            <TaskColumn
+              title="In Progress"
+              tasks={filterTasks(inProgressTasks)}
+              addTask={(task) => handleAddTask(task, "In Progress")}
+              updateTask={handleUpdateTask}
+              deleteTask={handleDeleteTask}
+            />
+          </div>
+
+          {/* Done Column */}
+          <div className="w-full sm:w-1/3">
+            <TaskColumn
+              title="Done"
+              tasks={filterTasks(doneTasks)}
+              addTask={(task) => handleAddTask(task, "Done")}
+              updateTask={handleUpdateTask}
+              deleteTask={handleDeleteTask}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Footer - No Sticky, Appears at the End of Page */}

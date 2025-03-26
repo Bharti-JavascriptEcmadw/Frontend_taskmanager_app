@@ -54,6 +54,7 @@ const Filter = ({ onFilterChange }) => {
         >
           Apply Filters
         </button>
+      
 
         {/* Ellipsis Icon for Mobile */}
         <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-all md:hidden">
