@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTask, updateTask, deleteTask } from "../redux/taskSlice"; 
+import { addTask, updateTask, deleteTask, setTasks } from "../redux/taskSlice"; 
 import Header1 from "../Components/Header1";
 import TaskColumn from "../Components/TaskColumn";
 import Filter from "../Components/Filter";
@@ -13,8 +13,20 @@ const Dashboard = () => {
   const [filter, setFilter] = useState({
     priority: "",
     title: "",
-    
   });
+
+  // Local Storage se Redux Store me Data Load Karna
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      dispatch(setTasks(JSON.parse(storedTasks))); // Redux store me set karna
+    }
+  }, [dispatch]);
+
+  // Redux Store ke changes ko Local Storage me Save Karna
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const handleAddTask = (task, column) => {
     dispatch(addTask({ ...task, status: column }));
@@ -32,10 +44,6 @@ const Dashboard = () => {
     setFilter(filters);
   };
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
   const filterTasks = (columnTasks) => {
     if (!columnTasks) return [];
     return columnTasks.filter((task) => {
@@ -52,20 +60,16 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Sticky Header */}
       <div className="sticky top-0 left-0 w-full bg-white shadow z-50">
         <Header1 />
       </div>
 
-      {/* Filter Section */}
       <div className="relative z-40 w-full bg-white shadow-md mt-14">
         <Filter onFilterChange={handleFilterChange} />
       </div>
 
-      {/* Task Board with Responsive Layout */}
       <div className="flex-1 p-4 bg-teal-200">
         <div className="flex flex-col sm:flex-row gap-4">
-          {/* To Do Column */}
           <div className="w-full sm:w-1/3">
             <TaskColumn
               title="To Do"
@@ -76,7 +80,6 @@ const Dashboard = () => {
             />
           </div>
 
-          {/* In Progress Column */}
           <div className="w-full sm:w-1/3">
             <TaskColumn
               title="In Progress"
@@ -87,7 +90,6 @@ const Dashboard = () => {
             />
           </div>
 
-          {/* Done Column */}
           <div className="w-full sm:w-1/3">
             <TaskColumn
               title="Done"
@@ -100,7 +102,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Footer - No Sticky, Appears at the End of Page */}
       <Footer />
     </div>
   );

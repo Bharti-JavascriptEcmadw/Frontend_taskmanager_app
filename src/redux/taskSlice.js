@@ -1,50 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  tasks: [
-    {
-      id: "1",
-      title: "Design Homepage",
-      description: "Create a user-friendly homepage layout.",
-      priority: "High",
-      
-      status: "To Do",
-    },
-    {
-      id: "2",
-      title: "Design Homepage",
-      description: "Create a user-friendly homepage layout.",
-      priority: "Medium",
-      
-      status: "To Do",
-    },
+// 🟢 Step 1: Local Storage se Initial State Load Karein (Agar Empty ho to Default Tasks)
+const loadTasksFromLocalStorage = () => {
+  try {
+    const tasks = localStorage.getItem("tasks");
+    if (tasks) {
+      return JSON.parse(tasks);
+    } else {
+      // 🟢 Default 5 Tasks
+      const defaultTasks = [
+        { id: 1, title: "Design UI Mockups", priority: "High", status: "To Do" },
+        { id: 2, title: "Set Up Database", priority: "Medium", status: "To Do" },
+        { id: 3, title: "Develop API Endpoints", priority: "High", status: "In Progress" },
+        { id: 4, title: "Write Documentation", priority: "Low", status: "In Progress" },
+        { id: 5, title: "Test Application", priority: "Medium", status: "Done" },
+      ];
+      localStorage.setItem("tasks", JSON.stringify(defaultTasks));
+      return defaultTasks;
+    }
+  } catch (error) {
+    console.error("Error loading tasks from local storage:", error);
+    return [];
+  }
+};
 
-    {
-      id: "3",
-      title: "Design Homepage",
-      description: "Create a user-friendly homepage layout.",
-      priority: "Low",
-      
-      status: "To Do",
-    },
-    {
-      id: "4",
-      title: "API Integration",
-      description: "Connect frontend with backend API.",
-      priority: "Medium",
-      likes: 5,
-    
-      status: "In Progress",
-    },
-    {
-      id: "5",
-      title: "Testing & Debugging",
-      description: "Run unit tests and fix bugs.",
-      priority: "Low",
-    
-      status: "Done",
-    },
-  ],
+const initialState = {
+  tasks: loadTasksFromLocalStorage(),
 };
 
 const taskSlice = createSlice({
@@ -53,26 +34,25 @@ const taskSlice = createSlice({
   reducers: {
     addTask: (state, action) => {
       state.tasks.push(action.payload);
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); 
     },
-    // moveTask: (state, action) => {
-    //   const { id, newStatus } = action.payload;
-    //   const task = state.tasks.find((task) => task.id === id);
-    //   if (task) {
-    //     task.status = newStatus;
-    //   }
-    // },
     updateTask: (state, action) => {
-      const updatedTask = action.payload;
-      const index = state.tasks.findIndex((task) => task.id === updatedTask.id);
+      const index = state.tasks.findIndex(task => task.id === action.payload.id);
       if (index !== -1) {
-        state.tasks[index] = updatedTask;
+        state.tasks[index] = action.payload;
       }
+      localStorage.setItem("tasks", JSON.stringify(state.tasks));
     },
     deleteTask: (state, action) => {
-      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      state.tasks = state.tasks.filter(task => task.id !== action.payload);
+      localStorage.setItem("tasks", JSON.stringify(state.tasks));
     },
-  },
+    setTasks: (state, action) => {
+      state.tasks = action.payload;
+      localStorage.setItem("tasks", JSON.stringify(state.tasks));
+    }
+  }
 });
 
-export const { addTask,  updateTask, deleteTask } = taskSlice.actions;
+export const { addTask, updateTask, deleteTask, setTasks } = taskSlice.actions;
 export default taskSlice.reducer;
